@@ -12,6 +12,8 @@ jobs:
         run: cd client && npm i && npm test
 
   docker:
+    needs: test-front
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       -
@@ -31,4 +33,5 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: vgillet/quete1902:latest
+          context: "{{defaultContext}}:client"
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/quete1902:latest
